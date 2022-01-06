@@ -1,20 +1,13 @@
 docker-software-package-install-pkg:
   pkg.installed:
     - names:
+      - python3-docker
       - ca-certificates
       - curl
       - gnupg
       - lsb-release
-      - python-pip
     - reload_modules: true
     - refresh: true
-
-python-docker-installed:
-  pip.installed:
-    - name: docker
-    - bin_envNone: /usr/bin/pip
-    - require:
-      - pkg: python-pip
 
 add-docker-gpg-key:
   cmd.run:
@@ -36,3 +29,9 @@ docker-service-running:
   service.running:
     - name: docker
     - enable: true
+
+install-compose:
+  cmd.run:
+    - names:
+      - curl -L "https://github.com/docker/compose/releases/download/1.29.2/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose
+      - chmod +x /usr/local/bin/docker-compose
